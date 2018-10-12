@@ -2,6 +2,9 @@
 goflick
 =======
 
+.. image:: https://travis-ci.com/rusq/goflick.svg?branch=master
+
+
 Package provides convenient interface for querying `Flick Electric`_ API.
 
 Currently only the NeedlePrice is supported.
