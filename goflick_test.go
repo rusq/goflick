@@ -159,17 +159,16 @@ func TestFlickConnect_apiCall(t *testing.T) {
 		endpoint string
 	}
 	tests := []struct {
-		name      string
-		fields    fields
-		args      args
-		wantBody  []byte
-		wantErr   bool
-		wantPanic bool
+		name     string
+		fields   fields
+		args     args
+		wantBody []byte
+		wantErr  bool
 	}{
-		{"panic", fields{Token: ""}, args{"price"}, nil, false, true},
-		{"panic TokenType", fields{TokenType: ""}, args{"price"}, nil, false, true},
-		{"invalid auth", fields{Token: "123", TokenType: "456"}, args{"price"}, nil, true, false},
-		{"invalid endpoint", fields{Token: "123", TokenType: "bearer"}, args{"$$$$"}, nil, true, false},
+		{"panic", fields{Token: ""}, args{"price"}, nil, true},
+		{"panic TokenType", fields{TokenType: ""}, args{"price"}, nil, true},
+		{"invalid auth", fields{Token: "123", TokenType: "456"}, args{"price"}, nil, true},
+		{"invalid endpoint", fields{Token: "123", TokenType: "bearer"}, args{"$$$$"}, nil, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -179,14 +178,6 @@ func TestFlickConnect_apiCall(t *testing.T) {
 				Expires:     tt.fields.Expires,
 				AccessToken: tt.fields.AccessToken,
 			}
-			defer func() {
-				if r := recover(); r != nil {
-					if !tt.wantPanic {
-						t.Errorf("panicked but wasn't expected: %s", r)
-					}
-
-				}
-			}()
 
 			gotBody, err := fc.APIcall(tt.args.endpoint)
 			if (err != nil) != tt.wantErr {
